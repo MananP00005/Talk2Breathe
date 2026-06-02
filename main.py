@@ -19,15 +19,25 @@ If you do not know something, say so honestly and suggest they talk to a trusted
 
 Here are some documents that you can use to help answer questions: {docs}
 
-Here is the conversation {convo}
+Here is the conversation {question}
 """
 
 prompt = ChatPromptTemplate.from_template(template) 
 chain = prompt | model # create a chain that combines the prompt and the model
 
-result = chain.invoke({
-    "docs": "Smoking can cause lung cancer, heart disease, and many other health problems. It can also harm your friends and family through secondhand smoke.",
-    "convo": "Why is smoking bad for you?"
-})
+#Question is what they take in
+#Docs is the information  
+while True: 
+    question = input("What can I help you with today? \n Type Exit to leave the conversation") #input is the built in function for user prompting
+    print("\n\n")
 
-print(result)
+    if question.strip().lower() == "exit": #if they type exit, it will break the loop and end the conversation
+        print("Goodbye! Remember to make healthy choices and stay active!")
+        break
+    result = chain.invoke({
+        "docs": "Smoking can cause lung cancer, heart disease, and many other health problems. It can also harm your friends and family through secondhand smoke.",
+        "question": question
+    })
+
+    print(result)
+    break;
