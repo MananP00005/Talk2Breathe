@@ -1,6 +1,6 @@
 # Talk2Breathe-AI
 
-A child-centered AI chatbot for smoking prevention education.
+A child-centered AI chatbot for smoking prevention education. 
 
 ---
 
