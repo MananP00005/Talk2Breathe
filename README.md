@@ -10,7 +10,7 @@ A child-centered AI chatbot for smoking prevention education.
 
 ---
  
-## Setup
+## Setup 
 
 ### 1. Install Ollama
 
