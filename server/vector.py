@@ -1,12 +1,9 @@
 from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
-from langchain_core.documents import Document
+from langchain_community.document_loaders import PyPDFLoader, BSHTMLLoader, Docx2txtLoader
 import os
-import pandas as pd
 import shutil
 
-DataFrame = pd.read_csv('Smoking_CSV.csv')
-DataFrame = DataFrame.dropna(subset=['text', 'location'])
 embeddings = OllamaEmbeddings(model="mxbai-embed-large")
 Database_location = "./chroma_db"
 
@@ -15,17 +12,30 @@ if os.path.exists(Database_location):
 
 documents = []
 ids = []
-for i, row in DataFrame.iterrows():
-    doc = Document(
-        page_content=row['text'],
-        metadata={"source": row['location']},
-        id=str(i)
-    )
-    ids.append(str(i))
-    documents.append(doc)
+
+docs_folder = "./server/docs"
+doc_id = 0
+
+for filename in os.listdir(docs_folder):
+    filepath = os.path.join(docs_folder, filename)
+
+    if filename.endswith(".pdf"):
+        loader = PyPDFLoader(filepath)
+    elif filename.endswith(".html"):
+        loader = BSHTMLLoader(filepath)
+    elif filename.endswith(".docx"):
+        loader = Docx2txtLoader(filepath)
+    else:
+        continue
+
+    loaded = loader.load()
+    for page in loaded:
+        ids.append(str(doc_id))
+        documents.append(page)
+        doc_id += 1
 
 vector_store = Chroma(
-    collection_name="Smoking_CSV",
+    collection_name="Talk2Breathe",
     embedding_function=embeddings,
     persist_directory=Database_location
 )
