@@ -1,5 +1,7 @@
 venv/
 chroma_db/
+chroma_db_waste/
+logs/
 __pycache__/
 *.pyc
 *.pyo
